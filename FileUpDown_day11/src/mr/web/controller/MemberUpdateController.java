@@ -1,0 +1,55 @@
+package mr.web.controller;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import mr.web.model.MemberDAO;
+import mr.web.model.MemberDTO;
+
+public class MemberUpdateController implements Controller{	
+	
+	@Override
+	public String requestHandler(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		String ctx = request.getContextPath();
+		
+		int num = Integer.parseInt(request.getParameter("num"));
+		int age = Integer.parseInt(request.getParameter("age"));
+		String email = request.getParameter("email");
+		String tel = request.getParameter("tel");
+		
+		MemberDTO dto = new MemberDTO();
+		if(request.getParameter("mode").equals("fupdate")) {
+			String fileName = request.getParameter("fileName");
+			dto.setFileName(fileName);
+		}
+		
+		dto.setNum(num);
+		dto.setAge(age);
+		dto.setEmail(email);
+		dto.setTel(tel);
+		
+		MemberDAO dao = new MemberDAO();
+		int cnt=-1;
+		if(request.getParameter("mode").equals("fupdate")) {
+			cnt = dao.memberUpdateFile(dto);
+		}else {
+			cnt = dao.memberUpdate(dto);
+		}
+
+		String nextPage = null;
+		
+		if(cnt>0) {
+			// redirect
+			nextPage ="redirect:"+ctx+"/memberList.do";
+		}else {
+			throw new ServletException("update failed!!!");
+		}
+		
+		return nextPage;
+	}
+}

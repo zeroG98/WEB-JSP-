@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mr.web.mybatis.MemberMapper">
+   
+  <!-- DAO와 연결하기 위해서는 id가 동일해야 하고,
+  	     이때 id는 보통 메서드명으로 한다.  -->  
+  <select id="memberList" resultType="memberDTO">
+    select * from member2
+  </select>
+  <insert id="memberInsert" parameterType="memberDTO">
+      <!-- insert into member(id, pw, name, age, email, tel) values(?,?,?,?,?,?) -->
+      insert into member2(id, pw, name, age, email, tel) 
+      			values(
+	      				#{id}, 
+	      				#{pw}, 
+	      				#{name}, 
+	      				#{age}, 
+	      				#{email}, 
+	      				#{tel}
+      				)
+  </insert>
+  
+  <insert id="memberInsertFile" parameterType="memberDTO">
+      <!-- insert into member(id, pw, name, age, email, tel) values(?,?,?,?,?,?) -->
+      insert into member2(id, pw, name, age, email, tel, fileName) 
+      			values(
+	      				#{id}, 
+	      				#{pw}, 
+	      				#{name}, 
+	      				#{age}, 
+	      				#{email}, 
+	      				#{tel},
+	      				#{fileName}
+      				)
+  </insert>
+  
+  <delete id="memberDelete" parameterType="Integer">
+      delete from member2 where num=#{num}
+  </delete>
+  
+  <delete id="memberDeleteFile" parameterType="Integer">
+      update member2 set fileName='' where num=#{num}
+  </delete>
+  
+  <select id="memberInfo" parameterType="Integer" resultType="memberDTO">
+      select * from member2 where num=#{num}
+  </select>
+  
+  <update id="memberUpdate" parameterType="memberDTO">
+      update member2 set age=#{age}, email=#{email}, tel=#{tel} where num=#{num}
+  </update>
+  
+  <update id="memberUpdateFile" parameterType="memberDTO">
+      update member2 set age=#{age}, email=#{email}, tel=#{tel}, fileName=#{fileName} 
+      where num=#{num}
+  </update>
+  
+  <select id="memberLogin" parameterType="memberDTO" resultType="String">
+      select name from member2 where id=#{id} and pw=#{pw}
+  </select>
+  
+  <select id="memberIdChk" parameterType="String" resultType="String">
+      select id from member2 where id=#{id}
+  </select>
+  
+</mapper>
